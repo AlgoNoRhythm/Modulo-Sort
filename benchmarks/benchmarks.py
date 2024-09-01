@@ -10,8 +10,15 @@ import random
 from typing import Callable, List, Dict, Any
 import logging
 import time
+import ctypes
+import os
+
+ES_CONTINUOUS = 0x80000000
+ES_SYSTEM_REQUIRED = 0x00000001
 
 
+# Prevent the system from going to sleep
+ctypes.windll.kernel32.SetThreadExecutionState(ES_CONTINUOUS | ES_SYSTEM_REQUIRED)
 
 logging.basicConfig(filename='script.log', level=logging.INFO)
 
@@ -26,7 +33,7 @@ class SortingEvaluator:
         self.sorting_algorithms = sorting_algorithms
         self.algorithm_names = list(sorting_algorithms.keys())
         self.results = []
-        self.results_df = pd.DataFrame()
+        self.results_df = pd.read_pickle('results/results_df.pkl') if os.path.isfile('results/results_df.pkl') else None
         self.metrics_df = pd.DataFrame()
         self.distribution_metrics_df = pd.DataFrame()
         self.size_metrics_df = pd.DataFrame()
@@ -237,8 +244,8 @@ class SortingEvaluator:
                             arr = self.generate_large_random_array(size, dist, integer, range_min, range_max)
                             row_result = self.run_single_evaluation(arr, size, dist, range_min, range_max, integer, run + 1)
                             self.results.append(row_result)
-
-        self.results_df = pd.DataFrame(self.results)
+        new_results = pd.DataFrame(self.results)
+        self.results_df = pd.concat([self.results_df, new_results]) if self.results_df is not None else new_results
         self.calculate_metrics()
 
 
@@ -253,14 +260,16 @@ sorting_algorithms = {
 }
 
 evaluator = SortingEvaluator(sorting_algorithms)
-evaluator.evaluate(integer=True, runs=5)
+evaluator.evaluate(integer=True, runs=1)
 print(tabulate(evaluator.metrics_df, headers='keys', tablefmt='psql', showindex=False))
 print(tabulate(evaluator.distribution_metrics_df, headers='keys', tablefmt='psql', showindex=False))
 print(tabulate(evaluator.size_metrics_df, headers='keys', tablefmt='psql', showindex=False))
 print(tabulate(evaluator.range_metrics_df, headers='keys', tablefmt='psql', showindex=False))
+evaluator.results_df.to_pickle('results/results_df.pkl')
 evaluator.metrics_df.to_pickle('results/metrics_df.pkl')
 evaluator.distribution_metrics_df.to_pickle('results/distribution_metrics_df.pkl')
 evaluator.size_metrics_df.to_pickle('results/size_metrics_df.pkl')
 evaluator.range_metrics_df.to_pickle('results/range_metrics_df.pkl')
 
 
+ctypes.windll.kernel32.SetThreadExecutionState(ES_CONTINUOUS)

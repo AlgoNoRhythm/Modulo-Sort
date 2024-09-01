@@ -1,4 +1,4 @@
-from typing import Dict, List, Tuple
+from typing import Dict, List, Tuple, Union
 from collections import defaultdict
 
 class SortingUtils:
@@ -41,43 +41,58 @@ class SortingUtils:
         return arr
 
     @staticmethod
-    def count_duplicates(arr: List[int]) -> Dict[int, List[int]]:
+    def count_duplicates(arr: List[int]) -> Dict[int, Union[int, List[int]]]:
         """
-        Appends elements to a dictionary key corresponding to each unique element,
-        preserving their original order for stability.
+        Tracks occurrences of elements in the array. On the first occurrence of an element, its index is stored.
+        On subsequent occurrences, the element is moved to a defaultdict that maps elements to lists of their duplicates.
 
         Args:
-            arr (List[int]): The array of integers to count duplicates in.
+            arr (List[int]): The array of integers to process.
 
         Returns:
-            Dict[int, List[int]]: A dictionary where the keys are the elements from the array,
-                                  and the values are lists of those elements in their original order.
+            Dict[int, List[int]]: A dictionary where keys are the elements that have duplicates and values
+                                   are lists of those elements, effectively storing duplicates after the first occurrence.
         """
-        count_dict = defaultdict(list)  # Initialize a defaultdict with list as default factory
+        count_dict = {}
+        duplicates_dict = defaultdict(list)
 
-        for element in arr:
-            # Append the element itself to the corresponding key's list in the count_dict
-            count_dict[element].append(element)  # Append the element to preserve order
+        for k, element in enumerate(arr):
+            original_index = count_dict.get(element)
 
-        return dict(count_dict)
+            if type(original_index) == int:
+                duplicates_dict[element].append(arr[original_index])
+
+                duplicates_dict[element].append(element)
+
+                count_dict[element] = ""
+
+            elif original_index == "":
+                duplicates_dict[element].append(element)
+            else:
+                # Track the first occurrence with a simple index
+                count_dict[element] = k
+
+        return duplicates_dict
 
     @staticmethod
     def append_duplicates(duplicates_dict: Dict[int, List[int]], to_append: int, sorted_arr: List[int]) -> None:
         """
-        Appends duplicates of a given value to a sorted array.
+        Appends duplicates of a given element to a sorted array, if available. Otherwise simply appends the element
 
         Args:
-            duplicates_dict (Dict[int, List[int]]): A dictionary containing the elements as keys and a list of duplicates as values.
-            to_append (int): The element to extend the aray with.
+            duplicates_dict (Dict[int, List[int]]): A dictionary containing elements as keys and a list of duplicates as values.
+            to_append (int): The element to append duplicates for.
             sorted_arr (List[int]): The list to which duplicates will be appended.
 
         Returns:
             None
         """
-        to_extend = duplicates_dict.get(to_append)
+        # Check if the element has duplicates to append
+        if to_append in duplicates_dict:
+            sorted_arr.extend(duplicates_dict[to_append])
+        else:
+            sorted_arr.append(to_append)
 
-        # Extend the sorted_arr list with the duplicates of the element
-        sorted_arr.extend(to_extend)
 
     @staticmethod
     def find_min_and_max(arr: List[int]) -> Tuple[int, int]:
