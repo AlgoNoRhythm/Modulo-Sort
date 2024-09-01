@@ -68,9 +68,7 @@ Modulo Sort involves several steps, each contributing to the overall time comple
    - For larger sub-buckets using Radix Sort: **O(z + d)**, where **z** is the number of elements and **d** is the number of digits of the maximum remainder (equal to `modulo_range`).
 
 The total complexity can be expressed as:
-\[
-O(n) + O(s) + l \cdot O(z \cdot d)
-\]
+\[ O(n) + O(s) + l \cdot O(z \cdot d)\]
 Where:
 - **s**: Number of small arrays.
 - **l**: Number of sub-arrays with more than three elements.
