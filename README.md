@@ -28,7 +28,9 @@ The core idea of Modulo Sort is to distribute the input numbers into "buckets" b
    - **Second key**: The result of the modulo operation between the number minus the minimum value and `modulo_range`.
    
    For a given number **num**:
-   ```index = floor((num - min_value) / modulo_range) modulo_val = (num - min_value) % modulo_range```
+```
+index = floor((num - min_value) / modulo_range) modulo_val = (num - min_value) % modulo_range
+```
    
    The value is stored in `buckets[index][modulo_val]`.
 
@@ -59,7 +61,10 @@ Modulo Sort involves several steps, each contributing to the overall time comple
    - For larger sub-buckets using Radix Sort: **O(z + d)**, where **z** is the number of elements and **d** is the number of digits of the maximum remainder (equal to `modulo_range`).
 
 The total complexity can be expressed as:
-```O(n) + O(s) + l * O(z * d)```
+```
+O(n) + O(s) + l * O(z * d)
+```
+
 Where:
 - **s**: Number of small arrays.
 - **l**: Number of sub-arrays with more than three elements.
