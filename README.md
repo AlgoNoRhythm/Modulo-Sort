@@ -1,4 +1,4 @@
-# Modulo Sort: A Novel Sorting Algorithm for Positive Integers
+# Modulo Sort: A Fast Sorting Algorithm for Positive Integers
 
 ## Summary
 
@@ -20,9 +20,7 @@ The core idea of Modulo Sort is to distribute the input numbers into "buckets" b
 
 1. **Calculate Modulo Range**: 
    The `modulo_range` determines the size of each bucket to ensure an even distribution of numbers across all buckets:
-   \[
-   \text{modulo\_range} = \left\lfloor \frac{\text{max\_value} - \text{min\_value}}{\text{len(arr)}} \right\rfloor + 1
-   \]
+   ```modulo_range = floor((max_value - min_value) / len(arr)) + 1```
    
 2. **Distribute Values into Buckets**:
    Each number is placed into a dictionary with two levels of keys:
@@ -30,19 +28,12 @@ The core idea of Modulo Sort is to distribute the input numbers into "buckets" b
    - **Second key**: The result of the modulo operation between the number minus the minimum value and `modulo_range`.
    
    For a given number **num**:
-   \[
-   \text{index} = \left\lfloor \frac{\text{num} - \text{min\_value}}{\text{modulo\_range}} \right\rfloor
-   \]
-   \[
-   \text{modulo\_val} = (\text{num} - \text{min\_value}) \% \text{modulo\_range}
-   \]
+   ```index = floor((num - min_value) / modulo_range) modulo_val = (num - min_value) % modulo_range```
    
    The value is stored in `buckets[index][modulo_val]`.
 
 3. **Determine Maximum Bucket Index**:
-   \[
-   \text{maximum\_bucket} = \left\lfloor \frac{\text{max\_value} - \text{min\_value}}{\text{modulo\_range}} \right\rfloor
-   \]
+   ```maximum_bucket = floor((max_value - min_value) / modulo_range)```
 
 4. **Sort Buckets**:
    Iterate through all the available buckets from **0** to **maximum_bucket**:
@@ -68,15 +59,15 @@ Modulo Sort involves several steps, each contributing to the overall time comple
    - For larger sub-buckets using Radix Sort: **O(z + d)**, where **z** is the number of elements and **d** is the number of digits of the maximum remainder (equal to `modulo_range`).
 
 The total complexity can be expressed as:
-\[ O(n) + O(s) + l \cdot O(z \cdot d)\]
+```O(n) + O(s) + l * O(z * d)```
 Where:
 - **s**: Number of small arrays.
 - **l**: Number of sub-arrays with more than three elements.
 
 On average, the complexity simplifies to:
-\[
-O(s) + l \cdot O(z \cdot d)
-\]
+```
+O(s) + l * O(z * d)
+```
 
 ### Best and Worst Case Scenarios
 
