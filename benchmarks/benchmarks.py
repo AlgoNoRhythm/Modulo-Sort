@@ -1,6 +1,5 @@
 from modulo_sort import ModuloSort
 from quick_sort import QuickSort
-from tabulate import tabulate
 from merge_sort import MergeSort
 from bucket_sort import BucketSort, QuickBucketSort
 from radix_sort import RadixSort
@@ -10,15 +9,9 @@ import random
 from typing import Callable, List, Dict, Any
 import logging
 import time
-import ctypes
 import os
 
-ES_CONTINUOUS = 0x80000000
-ES_SYSTEM_REQUIRED = 0x00000001
 
-
-# Prevent the system from going to sleep
-ctypes.windll.kernel32.SetThreadExecutionState(ES_CONTINUOUS | ES_SYSTEM_REQUIRED)
 
 logging.basicConfig(filename='script.log', level=logging.INFO)
 
@@ -261,10 +254,6 @@ sorting_algorithms = {
 
 evaluator = SortingEvaluator(sorting_algorithms)
 evaluator.evaluate(integer=True, runs=1)
-print(tabulate(evaluator.metrics_df, headers='keys', tablefmt='psql', showindex=False))
-print(tabulate(evaluator.distribution_metrics_df, headers='keys', tablefmt='psql', showindex=False))
-print(tabulate(evaluator.size_metrics_df, headers='keys', tablefmt='psql', showindex=False))
-print(tabulate(evaluator.range_metrics_df, headers='keys', tablefmt='psql', showindex=False))
 evaluator.results_df.to_pickle('results/results_df.pkl')
 evaluator.metrics_df.to_pickle('results/metrics_df.pkl')
 evaluator.distribution_metrics_df.to_pickle('results/distribution_metrics_df.pkl')
@@ -272,4 +261,3 @@ evaluator.size_metrics_df.to_pickle('results/size_metrics_df.pkl')
 evaluator.range_metrics_df.to_pickle('results/range_metrics_df.pkl')
 
 
-ctypes.windll.kernel32.SetThreadExecutionState(ES_CONTINUOUS)
