@@ -8,7 +8,7 @@ Modulo Sort is a sorting algorithm designed specifically for positive integers. 
 
 ### Intuition
 
-Modulo Sort is inspired by the way we commonly represent time. When looking at a clock, we usually think in terms of hours and minutes past the hour, rather than the total minutes from the start of the day. This approach allows us to evaluate hours and minutes independently, leading to more efficient processing.
+An easy way to visualize Modulo Sort is to reflect on how we represent time. When looking at a clock, we usually think in terms of hours and minutes past the hour, rather than the total minutes from the start of the day. This approach allows us to evaluate hours and minutes independently, leading to more efficient processing.
 
 Similarly, any positive integer can be represented by its quotient (floor division) and remainder (modulo) when divided by an arbitrary number. For instance, if we choose **10** as the divisor, the number **53** can be uniquely identified by the tuple **(53 // 10, 53 % 10)** or **(5, 3)**. Modulo Sort leverages this concept to sort numbers more efficiently by breaking them down into these components.
 
@@ -86,6 +86,7 @@ The algorithm was benchmarked across a range of input sizes and value ranges, us
 
 For detailed benchmarking results, please refer to the `benchmarks/results/results_df.pkl` file. Additional benchmark scripts are available in the `benchmarks` folder for further experimentation.
 
+![benchmarks](benchmarks/results/benchmarks.png?raw=true "Benchmarks")
 ---
 
 
